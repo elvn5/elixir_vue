@@ -1,3 +1,11 @@
+<route>
+{
+  meta: {
+    layout: "auth"
+  }
+}
+</route>
+
 <script setup lang="ts">
 import { useForm } from "vee-validate";
 import { randomUUID, signInSchema } from "@/utils";

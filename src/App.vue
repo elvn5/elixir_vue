@@ -1,6 +1,6 @@
 <template>
-  <v-snackbar-queue v-model="messages.queue" />
   <v-app>
+    <v-snackbar-queue v-model="messages.queue" />
     <router-view />
   </v-app>
 </template>

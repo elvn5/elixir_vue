@@ -1,12 +1,5 @@
 <template>
-  <div>
-    <RouterLink to="auth">
-      Auth
-    </RouterLink>
-    <RouterLink to="signup">
-      Sign Up
-    </RouterLink>
-  </div>
+  <v-container />
 </template>
 
 <script lang="ts" setup>

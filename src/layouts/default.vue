@@ -1,45 +1,43 @@
 <template>
-  <v-main>
-    <v-app-bar :elevation="2">
-      <template #prepend>
-        <v-app-bar-nav-icon />
-      </template>
+  <v-layout>
+    <v-navigation-drawer
+      expand-on-hover
+      rail
+    >
+      <router-link to="/">
+        <v-img
+          src="@/assets/logo.png"
+          width="64px"
+          height="64px"
+        />
+      </router-link>
+      <v-divider />
 
-      <v-app-bar-title>
-        <router-link to="/">
-          <v-img
-            src="@/assets/logo.png"
-            width="64px"
-            height="64px"
+      <v-list>
+        <router-link to="/profile">
+          <v-list-item
+            prepend-avatar="https://avatar.iran.liara.run/public/15"
+            title="Ermek"
           />
         </router-link>
-      </v-app-bar-title>
-      <template #append>
-        <router-link
-          v-if="isAuthenticated"
-          to="/profile"
-        >
-          <v-btn
-            icon="mdi-account"
-          />
-        </router-link>
+      </v-list>
 
 
-        <v-btn
-          v-if="isAuthenticated"
-          icon="mdi-logout"
+      <v-list
+        density="compact"
+        nav
+      >
+        <v-list-item
+          prepend-icon="mdi-logout"
+          title="Выйти"
           @click="authStore.logout"
         />
-        <router-link
-          v-else
-          to="/auth"
-        >
-          <v-btn icon="mdi-login" />
-        </router-link>
-      </template>
-    </v-app-bar>
-    <router-view />
-  </v-main>
+      </v-list>
+    </v-navigation-drawer>
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-layout>
 </template>
 
 <script lang="ts" setup>

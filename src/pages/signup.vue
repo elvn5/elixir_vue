@@ -6,6 +6,7 @@ import { useSignUpStore } from "@/stores";
 
 const { signUp } = useSignUpStore()
 const formId = randomUUID();
+
 const { handleSubmit, defineField, errors } = useForm({
   validationSchema: toTypedSchema(signUpSchema),
 })
@@ -70,6 +71,15 @@ const onSubmit = handleSubmit(async data => {
         >
           Зарегистрироваться
         </v-btn>
+
+        <router-link to="/auth">
+          <v-btn
+            class="mx-auto w-100 mt-2"
+            variant="text"
+          >
+            Войти
+          </v-btn>
+        </router-link>
       </v-form>
     </v-sheet>
   </v-container>
@@ -89,3 +99,11 @@ const onSubmit = handleSubmit(async data => {
 }
 </style>
 
+
+<route>
+{
+meta: {
+layout: "auth"
+}
+}
+</route>
