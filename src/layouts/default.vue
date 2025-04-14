@@ -3,6 +3,7 @@
     <v-navigation-drawer
       expand-on-hover
       rail
+      permanent
     >
       <router-link to="/">
         <v-img
@@ -42,10 +43,8 @@
 
 <script lang="ts" setup>
   import { useAuthStore } from "@/stores";
-  import { storeToRefs } from "pinia";
 
   const authStore = useAuthStore();
 
-  const { isAuthenticated } = storeToRefs(authStore);
 
 </script>
