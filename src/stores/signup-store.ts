@@ -1,4 +1,4 @@
-import { api, type SignUpData } from "@/services";
+import { type SignUpData, supabaseApp } from "@/services";
 import router from "@/router";
 import { AxiosError } from "axios";
 import { defineStore } from "pinia";
@@ -9,13 +9,12 @@ export const useSignUpStore = defineStore("signup-store", ()=> {
   async function signUp(data: SignUpData) {
     const { add } = useMessagesStore();
 
-    const { email, password, username } = data;
+    const { email, password } = data;
     try {
-      const success = await api.signUp({
+      const success = await supabaseApp.auth.signUp({
         email,
         password,
-        username,
-      });
+      })
 
       if(success) {
         await router.push({ path: "/auth" });

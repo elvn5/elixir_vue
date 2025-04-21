@@ -15,10 +15,14 @@
       <v-divider />
 
       <v-list>
-        <router-link to="/profile">
+        <router-link
+          to="/profile"
+          class="link"
+          active-class="active"
+        >
           <v-list-item
             prepend-avatar="https://avatar.iran.liara.run/public/15"
-            title="Ermek"
+            :title="authStore.profileName"
           />
         </router-link>
       </v-list>
@@ -28,6 +32,19 @@
         density="compact"
         nav
       >
+        <router-link
+          v-for="navItem in navItems"
+          :key="navItem.route"
+          class="link"
+          active-class="active"
+          :to="navItem.route"
+        >
+          <v-list-item
+            :prepend-icon="navItem.icon"
+            :title="navItem.title"
+          />
+        </router-link>
+
         <v-list-item
           prepend-icon="mdi-logout"
           title="Выйти"
@@ -42,9 +59,42 @@
 </template>
 
 <script lang="ts" setup>
-  import { useAuthStore } from "@/stores";
+import { useAuthStore } from "@/stores";
 
-  const authStore = useAuthStore();
+const authStore = useAuthStore();
 
-
+  const navItems = [
+    {
+      title: "Расписание",
+      icon: "mdi-clock-outline",
+      route: "/schedule",
+    },
+    {
+     title: "Пациенты",
+      icon: "mdi-account-multiple",
+      route: "/patients",
+    },
+    {
+      title: "Платежи",
+      icon: "mdi-cash",
+      route: "/payments",
+    },
+    {
+      title: "Напоминание",
+      icon: "mdi-bell-alert-outline",
+      route: "/reminders",
+    },
+  ]
 </script>
+
+<style lang="scss" scoped>
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.active {
+  color: cyan;
+}
+
+</style>

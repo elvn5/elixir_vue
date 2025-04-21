@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import { api, type SignInData } from "@/services";
-import { AxiosError } from "axios";
+import { type SignInData, supabaseApp } from "@/services";
 import { useMessagesStore } from "@/stores/messages-store";
 import router from "@/router";
+import type { AuthTokenResponsePassword } from "@supabase/supabase-js";
 
 export const useAuthStore = defineStore("auth",
   () => {
@@ -10,6 +10,7 @@ export const useAuthStore = defineStore("auth",
 
   const isAuthenticated = ref(false);
   const accessToken = ref<string | null>(null);
+  const profileName = ref<string | undefined>();
 
   function logout() {
     isAuthenticated.value = false;
@@ -19,18 +20,25 @@ export const useAuthStore = defineStore("auth",
 
   async function login(data: SignInData) {
     try {
-      const token = await api.login(data);
-      if(token) {
-        accessToken.value = token;
+
+      const response: AuthTokenResponsePassword = await supabaseApp.auth.signInWithPassword({
+        password: data.password,
+        email: data.email
+      })
+
+      if(response.error) {
+        add(response.error.message)
+      }
+
+      if(response.data.user) {
+        profileName.value = response.data.user?.email;
         isAuthenticated.value = true;
         void router.push("/");
       }
 
 
-    }catch (e: unknown) {
-      if(e instanceof AxiosError) {
-          add(e?.response?.data.message);
-      }
+    }catch (e) {
+        console.debug(e);
     }
   }
 
@@ -38,12 +46,13 @@ export const useAuthStore = defineStore("auth",
     login,
     isAuthenticated,
     logout,
-    accessToken
+    accessToken,
+    profileName
   }
 
 }, {
   persist: {
-    pick: ["isAuthenticated", "accessToken"],
+    pick: ["isAuthenticated", "accessToken", "profileName"],
     storage: localStorage
   }
   })

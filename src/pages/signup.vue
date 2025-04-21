@@ -12,7 +12,6 @@ const { handleSubmit, defineField, errors } = useForm({
 })
 
 const [email, emailAttr] = defineField("email")
-const [username, userNameAttr] = defineField("username");
 const [pass, passAttr] = defineField("password")
 const [confirmPass, confirmPassAttr] = defineField("confirmPassword")
 
@@ -39,14 +38,6 @@ const onSubmit = handleSubmit(async data => {
           v-model="email"
           label="E-Mail"
           :error-messages="errors.email"
-          required
-        />
-        <v-text-field
-          v-bind="userNameAttr"
-          id="username"
-          v-model="username"
-          label="Имя пользователя"
-          :error-messages="errors.username"
           required
         />
         <v-text-field

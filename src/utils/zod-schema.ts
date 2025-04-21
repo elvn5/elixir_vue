@@ -19,14 +19,13 @@ const passwordSchema = z.object({
   });
 
 const signInSchema = z.object({
-    username: username,
+    email: string.email(),
     password: string.min(8, "Минимуму 8 символов")
   }
 )
 
 const signUpSchema = z.object({
   email: string.email("Введите валидный e-mail"),
-  username: username,
 }).and(passwordSchema)
 
 type SignInForm = z.infer<typeof signInSchema>

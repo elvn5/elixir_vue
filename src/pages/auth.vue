@@ -20,7 +20,7 @@ const { handleSubmit, defineField, errors } = useForm({
   validationSchema: toTypedSchema(signInSchema),
 })
 
-const [username, usernameAttr] = defineField("username")
+const [email, emailAttr] = defineField("email")
 const [password, passwordAttr] = defineField("password")
 
 const onSubmit = handleSubmit(data => {
@@ -40,11 +40,11 @@ const onSubmit = handleSubmit(data => {
     >
       <v-form @submit.prevent="onSubmit">
         <v-text-field
-          v-bind="usernameAttr"
-          id="username"
-          v-model="username"
-          label="Имя пользователя"
-          :error-messages="errors.username"
+          v-bind="emailAttr"
+          id="email"
+          v-model="email"
+          label="E-mail"
+          :error-messages="errors.email"
           required
         />
         <v-text-field

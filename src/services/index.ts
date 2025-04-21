@@ -1,2 +1,2 @@
-export * from "./elixir-app"
 export * from "./types"
+export  * from "./supabase-app"
