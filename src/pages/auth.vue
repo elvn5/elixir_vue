@@ -62,13 +62,13 @@ const onSubmit = handleSubmit(data => {
           Войти
         </v-btn>
       </v-form>
-      <router-link to="/signup">
-        <v-container class="d-flex justify-center">
-          <v-btn variant="text">
-            Зарегистрироваться
-          </v-btn>
-        </v-container>
-      </router-link>
+<!--      <router-link to="/signup">-->
+<!--        <v-container class="d-flex justify-center">-->
+<!--          <v-btn variant="text">-->
+<!--            Зарегистрироваться-->
+<!--          </v-btn>-->
+<!--        </v-container>-->
+<!--      </router-link>-->
     </v-sheet>
   </v-container>
 </template>

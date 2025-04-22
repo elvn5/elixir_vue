@@ -1,8 +1,16 @@
 <template>
   <v-container>
-    <p class="text-h2 pb-2">
-      Пациенты
-    </p>
+    <v-row
+      class="pa-2 gap-2 justify-space-between align-center"
+    >
+      <p class="text-h2 pb-2">
+        Пациенты
+      </p>
+      <v-btn variant="outlined">
+        Добавить
+      </v-btn>
+    </v-row>
+
     <div class="patients-wrapper">
       <patients-profile />
       <patients-profile />

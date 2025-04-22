@@ -9,7 +9,7 @@ type AuthState = {
 const elixirApi = axios.create({
   baseURL: "http://localhost:4000/api",
   headers: {
-    "Authorization": `Bearer ${parseLocalStorage<AuthState>("auth").accessToken}`,
+    "Authorization": `Bearer ${parseLocalStorage<AuthState>("auth")?.accessToken}`,
   }
 })
 
