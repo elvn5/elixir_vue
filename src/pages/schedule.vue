@@ -19,6 +19,13 @@ export default {
 </script>
 <template>
   <v-container>
+    <v-row
+      class="pa-2 gap-2 justify-space-between align-center"
+    >
+      <p class="text-h2 pb-2">
+        Расписание
+      </p>
+    </v-row>
     <FullCalendar :options="calendarOptions" />
   </v-container>
 </template>

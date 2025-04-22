@@ -1,24 +1,11 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="2">
-        <v-avatar
-          icon="mdi-account"
-        />
-      </v-col>
-      <v-col cols="10">
-        <v-tabs>
-          <v-tab>
-            <v-btn>1</v-btn>
-          </v-tab>
-          <v-tab>
-            <v-btn>2</v-btn>
-          </v-tab>
-          <v-tab>
-            <v-btn>3</v-btn>
-          </v-tab>
-        </v-tabs>
-      </v-col>
+    <v-row
+      class="pa-2 gap-2 justify-space-between align-center"
+    >
+      <p class="text-h2 pb-2">
+        Профиль
+      </p>
     </v-row>
   </v-container>
 </template>

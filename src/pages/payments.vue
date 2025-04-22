@@ -1,31 +1,36 @@
 <template>
   <v-container>
-    <v-card-text>
-      Напоминания
-    </v-card-text>
+    <v-row
+      class="pa-2 gap-2 justify-space-between align-center"
+    >
+      <p class="text-h2 pb-2">
+        Платежи
+      </p>
+    </v-row>
+
     <v-table>
       <thead>
-      <tr>
-        <th class="text-left">
-          Ф.И.О
-        </th>
-        <th class="text-left">
-          Статус
-        </th>
-        <th class="text-left">
-          Дата и время уведомлений
-        </th>
-      </tr>
+        <tr>
+          <th class="text-left">
+            Ф.И.О
+          </th>
+          <th class="text-left">
+            Статус
+          </th>
+          <th class="text-left">
+            Дата и время уведомлений
+          </th>
+        </tr>
       </thead>
       <tbody>
-      <tr
-        v-for="item in desserts"
-        :key="item.name"
-      >
-        <td>{{ item.name }}</td>
-        <td>{{ item.calories }}</td>
-        <td>{{ item.calories }}</td>
-      </tr>
+        <tr
+          v-for="item in desserts"
+          :key="item.name"
+        >
+          <td>{{ item.name }}</td>
+          <td>{{ item.calories }}</td>
+          <td>{{ item.calories }}</td>
+        </tr>
       </tbody>
     </v-table>
   </v-container>

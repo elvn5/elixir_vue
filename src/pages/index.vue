@@ -1,5 +1,12 @@
 <template>
   <v-container>
+    <v-row
+      class="pa-2 gap-2 justify-space-between align-center"
+    >
+      <p class="text-h2 pb-2">
+        Лента новостей
+      </p>
+    </v-row>
     <news
       title="Michael Jordan"
       icon="mdi-account"
