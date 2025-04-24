@@ -1,181 +1,283 @@
 <template>
-  <v-container class="py-6">
-    <v-card
-      elevation="2"
-      class="mx-auto"
+  <v-container>
+    <v-row
+      class="pa-2 gap-2 justify-space-between align-center"
     >
-      <v-card-title class="text-h5">
-        Детали пациента
-      </v-card-title>
-      <v-divider />
-
-      <v-card-text>
-        <v-row dense>
-          <v-col
-            cols="12"
-            sm="6"
-          >
-            <strong>Имя:</strong> {{ patient.name }}
-          </v-col>
-          <v-col
-            cols="12"
-            sm="6"
-          >
-            <strong>Пол:</strong> {{ patient.gender }}
-          </v-col>
-          <v-col
-            cols="12"
-            sm="6"
-          >
-            <strong>Дата рождения:</strong> {{ formatDate(patient.dob) }}
-          </v-col>
-          <v-col
-            cols="12"
-            sm="6"
-          >
-            <strong>Телефон:</strong> {{ patient.phone }}
-          </v-col>
-          <v-col
-            cols="12"
-            sm="6"
-          >
-            <strong>Email:</strong> {{ patient.email }}
-          </v-col>
-          <v-col
-            cols="12"
-            sm="6"
-          >
-            <strong>Адрес:</strong> {{ patient.address }}
-          </v-col>
-          <v-col
-            cols="12"
-            sm="6"
-          >
-            <strong>Полис / Док. ID:</strong> {{ patient.documentId }}
-          </v-col>
-        </v-row>
-      </v-card-text>
-
-      <v-card-actions>
-        <v-spacer />
-        <v-btn
-          color="primary"
-          @click="dialog = true"
+      <p class="text-h2 pb-2">
+        Пациент #123
+      </p>
+      <v-btn variant="outlined">
+        Добавить
+      </v-btn>
+    </v-row>
+    <v-row>
+      <v-col cols="4">
+        <v-card
+          elevation="2"
+          class="mx-auto"
         >
-          Редактировать
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+          <v-card-title class="text-h5">
+            Детали пациента
+          </v-card-title>
+          <v-divider />
 
-    <!-- 📝 Модальное окно редактирования -->
-    <v-dialog
-      v-model="dialog"
-      max-width="600px"
-    >
-      <v-card>
-        <v-card-title>Редактирование пациента</v-card-title>
-        <v-divider />
-        <v-card-text>
-          <v-form
-            ref="formRef"
-            @submit.prevent="saveChanges"
-          >
+          <v-card-text>
+            <v-img
+              width="128px"
+              src="https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg"
+              class="pb-2"
+            />
             <v-row dense>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-text-field
-                  v-model="form.name"
-                  label="Имя"
-                  required
-                />
+                <strong>Имя:</strong> {{ patient.name }}
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-select
-                  v-model="form.gender"
-                  label="Пол"
-                  :items="['Мужской', 'Женский']"
-                  required
-                />
+                <strong>Пол:</strong> {{ patient.gender }}
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-text-field
-                  v-model="form.dob"
-                  label="Дата рождения"
-                  type="date"
-                />
+                <strong>Дата рождения:</strong> {{ formatDate(patient.dob) }}
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-text-field
-                  v-model="form.phone"
-                  label="Телефон"
-                />
+                <strong>Телефон:</strong> {{ patient.phone }}
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-text-field
-                  v-model="form.email"
-                  label="Email"
-                />
+                <strong>Email:</strong> {{ patient.email }}
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-text-field
-                  v-model="form.address"
-                  label="Адрес"
-                />
+                <strong>Адрес:</strong> {{ patient.address }}
               </v-col>
               <v-col
                 cols="12"
                 sm="6"
               >
-                <v-text-field
-                  v-model="form.documentId"
-                  label="Полис / Док. ID"
-                />
+                <strong>Полис / Док. ID:</strong> {{ patient.documentId }}
               </v-col>
             </v-row>
-          </v-form>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            text
-            @click="dialog = false"
-          >
-            Отмена
-          </v-btn>
-          <v-btn
-            color="primary"
-            @click="saveChanges"
-          >
-            Сохранить
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              color="primary"
+              @click="dialog = true"
+            >
+              Редактировать
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+
+        <!-- 📝 Модальное окно редактирования -->
+        <v-dialog
+          v-model="dialog"
+          max-width="600px"
+        >
+          <v-card>
+            <v-card-title>Редактирование пациента</v-card-title>
+            <v-divider />
+            <v-card-text>
+              <v-form
+                ref="formRef"
+                @submit.prevent="saveChanges"
+              >
+                <v-row dense>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="form.name"
+                      label="Имя"
+                      required
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-select
+                      v-model="form.gender"
+                      label="Пол"
+                      :items="['Мужской', 'Женский']"
+                      required
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="form.dob"
+                      label="Дата рождения"
+                      type="date"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="form.phone"
+                      label="Телефон"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="form.email"
+                      label="Email"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="form.address"
+                      label="Адрес"
+                    />
+                  </v-col>
+                  <v-col
+                    cols="12"
+                    sm="6"
+                  >
+                    <v-text-field
+                      v-model="form.documentId"
+                      label="Полис / Док. ID"
+                    />
+                  </v-col>
+                </v-row>
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                text
+                @click="dialog = false"
+              >
+                Отмена
+              </v-btn>
+              <v-btn
+                color="primary"
+                @click="saveChanges"
+              >
+                Сохранить
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-col>
+      <v-col cols="8">
+        <v-tabs
+          v-model="tab"
+          class="mb-2"
+        >
+          <v-tab value="history">
+            История посещений
+          </v-tab>
+          <v-tab value="media">
+            Медиафайлы
+          </v-tab>
+          <v-tab value="specification">
+            Особенности
+          </v-tab>
+          <v-tab value="keeps">
+            Медицинские заметки
+          </v-tab>
+        </v-tabs>
+
+        <v-tabs-window v-model="tab">
+          <v-tabs-window-item value="history">
+            <v-text-field
+              placeholder="Поиск..."
+              class="mb-2"
+            />
+            <v-table>
+              <thead>
+                <tr>
+                  <th class="text-left">
+                    Name
+                  </th>
+                  <th class="text-left">
+                    Calories
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="item in desserts"
+                  :key="item.name"
+                >
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.calories }}</td>
+                </tr>
+              </tbody>
+            </v-table>
+          </v-tabs-window-item>
+          <v-tabs-window-item value="media">
+            <v-expansion-panels multiple>
+              <v-expansion-panel>
+                <v-expansion-panel-title>
+                  {{ new Date().toLocaleDateString("en-US", {}) }}
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-img src="https://www.fdoctor.ru/upload/iblock/501/rentgen_grudnoy_kletki.jpg" />
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-tabs-window-item>
+          <v-tabs-window-item value="specification">
+            <v-expansion-panels multiple>
+              <v-expansion-panel>
+                <v-expansion-panel-title>
+                  {{ new Date().toLocaleDateString("en-US", {}) }}
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  Не любит котов
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-tabs-window-item>
+          <v-tabs-window-item value="keeps">
+            <v-expansion-panels multiple>
+              <v-expansion-panel>
+                <v-expansion-panel-title>
+                  {{ new Date().toLocaleDateString("en-US", {}) }}
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  Хороший пациент
+                </v-expansion-panel-text>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-tabs-window-item>
+        </v-tabs-window>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
-
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { reactive, ref } from "vue";
 
 const dialog = ref(false)
-
 const patient = reactive({
   name: 'Иван Иванов',
   gender: 'Мужской',
@@ -197,9 +299,61 @@ const saveChanges = () => {
   Object.assign(patient, form)
   dialog.value = false
 }
+
+const tab = ref(null);
+
+const desserts = [
+  {
+    name: 'Frozen Yogurt',
+    calories: 159,
+  },
+  {
+    name: 'Ice cream sandwich',
+    calories: 237,
+  },
+  {
+    name: 'Eclair',
+    calories: 262,
+  },
+  {
+    name: 'Cupcake',
+    calories: 305,
+  },
+  {
+    name: 'Gingerbread',
+    calories: 356,
+  },
+  {
+    name: 'Jelly bean',
+    calories: 375,
+  },
+  {
+    name: 'Lollipop',
+    calories: 392,
+  },
+  {
+    name: 'Honeycomb',
+    calories: 408,
+  },
+  {
+    name: 'Donut',
+    calories: 452,
+  },
+  {
+    name: 'KitKat',
+    calories: 518,
+  },
+]
 </script>
 
 <style scoped>
+.patients-wrapper {
+display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
 strong {
   display: inline-block;
   min-width: 100px;
