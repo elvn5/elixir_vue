@@ -4,7 +4,9 @@
       class="pa-2 gap-2 justify-space-between align-center"
     >
       <p class="text-h2 pb-2">
-        Лента новостей
+        Клиника <template v-if="clinicData">
+          {{ clinicData?.name }}
+        </template>
       </p>
     </v-row>
     <news
@@ -45,8 +47,10 @@
 import { useTheme } from 'vuetify'
 import News from "@/components/News.vue";
 import router from "@/router";
+import { useClinicStore } from "@/stores/clinic";
 
 const theme = useTheme()
+const { getClinic, clinicData } = useClinicStore()
 
 const isDark = computed(() => theme.global.name.value === "dark")
 
@@ -57,6 +61,10 @@ function toggleTheme () {
 function onClickNews(id: string) {
   void router.push(`/news/${id}`);
 }
+
+onMounted(()=> {
+  getClinic()
+})
 
 </script>
 

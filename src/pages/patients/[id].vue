@@ -6,8 +6,11 @@
       <p class="text-h2 pb-2">
         Пациент #123
       </p>
-      <v-btn variant="outlined">
-        Добавить
+      <v-btn
+        variant="outlined"
+        @click="attachDoctorDialog = true"
+      >
+        Закрепить врача
       </v-btn>
     </v-row>
     <v-row>
@@ -16,17 +19,26 @@
           elevation="2"
           class="mx-auto"
         >
-          <v-card-title class="text-h5">
+          <v-card-title class="text-h5 d-flex justify-space-between align-center">
             Детали пациента
+            <v-chip
+              color="green"
+              append-icon="mdi-check"
+            >
+              Оплачен
+            </v-chip>
           </v-card-title>
+
           <v-divider />
 
           <v-card-text>
             <v-img
-              width="128px"
+              width="200px"
               src="https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg"
               class="pb-2"
             />
+
+
             <v-row dense>
               <v-col
                 cols="12"
@@ -273,11 +285,50 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <v-dialog
+    v-model="attachDoctorDialog"
+    max-width="600px"
+  >
+    <v-card>
+      <v-card-title>Закрепить пациента ###</v-card-title>
+      <v-divider />
+      <v-container>
+        <v-select
+          :items="doctors"
+          label="Выбрать врача"
+        />
+      </v-container>
+      <v-card-actions>
+        <v-spacer />
+        <v-btn
+          text
+          @click="attachDoctorDialog = false"
+        >
+          Отмена
+        </v-btn>
+        <v-btn
+          color="primary"
+          @click="saveChanges"
+        >
+          Закрепить
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script setup lang="ts">
 import { reactive, ref } from "vue";
 
 const dialog = ref(false)
+const attachDoctorDialog = ref(false)
+
+const doctors = [
+  "1",
+  "2",
+  "3",
+]
+
 const patient = reactive({
   name: 'Иван Иванов',
   gender: 'Мужской',
