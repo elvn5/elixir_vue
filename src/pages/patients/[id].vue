@@ -4,7 +4,7 @@
       class="pa-2 gap-2 justify-space-between align-center"
     >
       <p class="text-h2 pb-2">
-        Пациент #123
+        Пациент {{ route.params.id }}
       </p>
       <v-btn
         variant="outlined"
@@ -21,86 +21,89 @@
         cols="12"
         md="4"
       >
-        <v-card
-          elevation="2"
-          class="mx-auto"
+        <ApiStateWrapper
+          :loading="patientInfo.loading"
+          :error="patientInfo.error"
         >
-          <v-card-title class="text-h6 d-flex justify-space-between align-center">
-            Детали пациента
-            <v-chip
-              color="green"
-            >
-              Оплачен
-            </v-chip>
-          </v-card-title>
+          <v-card
+            elevation="2"
+            class="mx-auto"
+          >
+            <v-card-title class="text-h6 d-flex justify-space-between align-center">
+              Детали пациента
+              <v-chip
+                color="green"
+              >
+                {{ patientInfo.data?.payment_status }}
+              </v-chip>
+            </v-card-title>
 
-          <v-divider />
+            <v-divider />
 
-          <v-card-text>
-            <v-img
-              max-width="100%"
-              aspect-ratio="1"
-              src="https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg"
-              class="pb-2"
-            />
+            <v-card-text>
+              <v-img
+                max-width="100%"
+                aspect-ratio="1"
+                :src="patientInfo?.data?.photo_url ||'https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg'"
+                class="pb-2"
+              />
+              <v-row dense>
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                  <strong>Имя:</strong> {{ patientInfo?.data?.full_name }}
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                  <strong>Пол:</strong> {{ patientInfo?.data?.gender }}
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                  <strong>Дата рождения:</strong> {{ formatBirthday(patientInfo?.data?.birth_date) }}
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                  <strong>Телефон:</strong> {{ patientInfo?.data?.phone }}
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                  <strong>Email:</strong> {{ patientInfo?.data?.email }}
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                  <strong>Адрес:</strong> {{ patientInfo?.data?.address }}
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="6"
+                >
+                  <strong>Полис / Док. ID:</strong> {{ patientInfo?.data?.document_id }}
+                </v-col>
+              </v-row>
+            </v-card-text>
 
-
-            <v-row dense>
-              <v-col
-                cols="12"
-                sm="6"
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                color="primary"
+                @click="dialog = true"
               >
-                <strong>Имя:</strong> {{ patient.name }}
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <strong>Пол:</strong> {{ patient.gender }}
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <strong>Дата рождения:</strong> {{ formatDate(patient.dob) }}
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <strong>Телефон:</strong> {{ patient.phone }}
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <strong>Email:</strong> {{ patient.email }}
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <strong>Адрес:</strong> {{ patient.address }}
-              </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-              >
-                <strong>Полис / Док. ID:</strong> {{ patient.documentId }}
-              </v-col>
-            </v-row>
-          </v-card-text>
-
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              color="primary"
-              @click="dialog = true"
-            >
-              Редактировать
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+                Редактировать
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </ApiStateWrapper>
 
         <!-- 📝 Модальное окно редактирования -->
         <v-dialog
@@ -209,7 +212,7 @@
         md="8"
       >
         <v-tabs
-          v-model="tab"
+          v-model="activeTab"
           class="mb-2"
           grow
           show-arrows
@@ -228,39 +231,44 @@
           </v-tab>
         </v-tabs>
 
-        <v-tabs-window v-model="tab">
+        <v-tabs-window v-model="activeTab">
           <v-tabs-window-item value="history">
-            <v-text-field
-              placeholder="Поиск..."
-              class="mb-2"
-            />
-            <div v-if="patientHistory.data">
-              <v-table>
-                <thead>
-                  <tr>
-                    <th class="text-left">
-                      Дата посещение
-                    </th>
-                    <th class="text-left">
-                      Сотрудник
-                    </th>
-                    <th class="text-left">
-                      Роль
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr
-                    v-for="visit in patientHistory.data"
-                    :key="visit.id"
-                  >
-                    <td>{{ formatDate(visit.visit_date) }}</td>
-                    <td>{{ visit.staff.full_name }}</td>
-                    <td>{{ visit.staff.role }}</td>
-                  </tr>
-                </tbody>
-              </v-table>
-            </div>
+            <!--            <v-text-field-->
+            <!--              placeholder="Поиск..."-->
+            <!--              class="mb-2"-->
+            <!--            />-->
+            <ApiStateWrapper
+              :loading="patientHistory.loading"
+              :error="patientHistory.error"
+            >
+              <div v-if="patientHistory.data">
+                <v-table>
+                  <thead>
+                    <tr>
+                      <th class="text-left">
+                        Дата посещение
+                      </th>
+                      <th class="text-left">
+                        Сотрудник
+                      </th>
+                      <th class="text-left">
+                        Роль
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      v-for="visit in patientHistory.data"
+                      :key="visit.id"
+                    >
+                      <td>{{ formatDate(visit.visit_date) }}</td>
+                      <td>{{ visit.staff.full_name }}</td>
+                      <td>{{ visit.staff.role }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </div>
+            </ApiStateWrapper>
           </v-tabs-window-item>
           <v-tabs-window-item value="media">
             <v-expansion-panels multiple>
@@ -312,7 +320,7 @@
       <v-divider />
       <v-container>
         <v-select
-          :items="doctors"
+          :items="[]"
           label="Выбрать врача"
         />
       </v-container>
@@ -336,21 +344,43 @@
 </template>
 <script setup lang="ts">
 import { reactive, ref } from "vue";
-import { usePatientHistory } from "@/stores/patient-history";
-import dayjs from "dayjs";
+import { usePatientHistory, usePatientInfo } from "@/stores";
+import ApiStateWrapper from "@/components/ApiStateWrapper.vue";
+import { formatBirthday, formatDate } from "../../utils";
 
 const dialog = ref(false)
 const attachDoctorDialog = ref(false)
 const patientHistory = usePatientHistory();
+const patientInfo = usePatientInfo()
 
-const doctors = [
-  "1",
-  "2",
-  "3",
-]
+const router = useRouter();
+const route = useRoute();
+
+const TAB_QUERY_PARAM = 'tab';
+
+const activeTab = ref<string>(route.query[TAB_QUERY_PARAM] as string || 'tab-1');
+
+watch(activeTab, (newTab) => {
+  router.replace({
+    query: {
+      ...route.query,
+      [TAB_QUERY_PARAM]: newTab,
+    },
+  });
+});
+
+watch(
+  () => route.query[TAB_QUERY_PARAM],
+  (newTab) => {
+    if (typeof newTab === 'string') {
+      activeTab.value = newTab;
+    }
+  }
+);
 
 onMounted(()=> {
-  patientHistory.fetchHistory()
+  patientHistory.fetchData()
+  patientInfo.fetchData()
 })
 
 const patient = reactive({
@@ -366,16 +396,11 @@ const patient = reactive({
 // Форма редактирования
 const form = reactive({ ...patient })
 
-const formatDate = (dateStr:string) => {
-  return new Date(dateStr).toLocaleDateString('ru-RU')
-}
 
 const saveChanges = () => {
   Object.assign(patient, form)
   dialog.value = false
 }
-
-const tab = ref(null);
 </script>
 
 <style scoped>

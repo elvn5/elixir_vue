@@ -5,3 +5,10 @@ export const formatDate = (value: string) => {
   return dayjs(cleaned).format('DD.MM.YYYY HH:mm')
 
 }
+
+export const formatBirthday = (date: Date | string | undefined): string => {
+  if(!date) {
+    return "";
+  }
+  return new Date(date).toLocaleDateString('ru-RU')
+}

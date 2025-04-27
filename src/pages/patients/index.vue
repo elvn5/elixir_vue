@@ -19,7 +19,7 @@ import router from "@/router";
 
 function goToDetails(id = 1){
   console.log(id)
-  router.push(`/patients/${id}`);
+  router.push(`/patients/${id}?tab=history`);
 }
 
 </script>
