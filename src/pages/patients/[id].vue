@@ -13,17 +13,22 @@
         Закрепить врача
       </v-btn>
     </v-row>
-    <v-row>
-      <v-col cols="4">
+    <v-row
+      class="patient-profile"
+      dense
+    >
+      <v-col
+        cols="12"
+        md="4"
+      >
         <v-card
           elevation="2"
           class="mx-auto"
         >
-          <v-card-title class="text-h5 d-flex justify-space-between align-center">
+          <v-card-title class="text-h6 d-flex justify-space-between align-center">
             Детали пациента
             <v-chip
               color="green"
-              append-icon="mdi-check"
             >
               Оплачен
             </v-chip>
@@ -33,7 +38,8 @@
 
           <v-card-text>
             <v-img
-              width="200px"
+              max-width="100%"
+              aspect-ratio="1"
               src="https://www.alleycat.org/wp-content/uploads/2019/03/FELV-cat.jpg"
               class="pb-2"
             />
@@ -198,10 +204,15 @@
           </v-card>
         </v-dialog>
       </v-col>
-      <v-col cols="8">
+      <v-col
+        cols="12"
+        md="8"
+      >
         <v-tabs
           v-model="tab"
           class="mb-2"
+          grow
+          show-arrows
         >
           <v-tab value="history">
             История посещений
@@ -223,27 +234,33 @@
               placeholder="Поиск..."
               class="mb-2"
             />
-            <v-table>
-              <thead>
-                <tr>
-                  <th class="text-left">
-                    Name
-                  </th>
-                  <th class="text-left">
-                    Calories
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="item in desserts"
-                  :key="item.name"
-                >
-                  <td>{{ item.name }}</td>
-                  <td>{{ item.calories }}</td>
-                </tr>
-              </tbody>
-            </v-table>
+            <div v-if="patientHistory.data">
+              <v-table>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Дата посещение
+                    </th>
+                    <th class="text-left">
+                      Сотрудник
+                    </th>
+                    <th class="text-left">
+                      Роль
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="visit in patientHistory.data"
+                    :key="visit.id"
+                  >
+                    <td>{{ formatDate(visit.visit_date) }}</td>
+                    <td>{{ visit.staff.full_name }}</td>
+                    <td>{{ visit.staff.role }}</td>
+                  </tr>
+                </tbody>
+              </v-table>
+            </div>
           </v-tabs-window-item>
           <v-tabs-window-item value="media">
             <v-expansion-panels multiple>
@@ -319,15 +336,22 @@
 </template>
 <script setup lang="ts">
 import { reactive, ref } from "vue";
+import { usePatientHistory } from "@/stores/patient-history";
+import dayjs from "dayjs";
 
 const dialog = ref(false)
 const attachDoctorDialog = ref(false)
+const patientHistory = usePatientHistory();
 
 const doctors = [
   "1",
   "2",
   "3",
 ]
+
+onMounted(()=> {
+  patientHistory.fetchHistory()
+})
 
 const patient = reactive({
   name: 'Иван Иванов',
@@ -352,59 +376,9 @@ const saveChanges = () => {
 }
 
 const tab = ref(null);
-
-const desserts = [
-  {
-    name: 'Frozen Yogurt',
-    calories: 159,
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-  },
-  {
-    name: 'Eclair',
-    calories: 262,
-  },
-  {
-    name: 'Cupcake',
-    calories: 305,
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-  },
-  {
-    name: 'Jelly bean',
-    calories: 375,
-  },
-  {
-    name: 'Lollipop',
-    calories: 392,
-  },
-  {
-    name: 'Honeycomb',
-    calories: 408,
-  },
-  {
-    name: 'Donut',
-    calories: 452,
-  },
-  {
-    name: 'KitKat',
-    calories: 518,
-  },
-]
 </script>
 
 <style scoped>
-.patients-wrapper {
-display: grid;
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
 strong {
   display: inline-block;
   min-width: 100px;
