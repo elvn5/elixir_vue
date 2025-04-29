@@ -1,17 +1,10 @@
 import * as z from "zod"
 
-const string = z.string({ message: "Обязательное поле" })
-
-const username = string
-  .min(4, "Минимум 4 символа")
-  .max(20, "Максимум 20 символов")
-  .regex(/^[A-Za-z]+$/, {
-  message: 'Разрешено использовать только латинские символы',
-});
+const stringRequired = z.string({ message: "Обязательное поле" })
 
 const passwordSchema = z.object({
-  password: string.min(8, "Минимуму 8 символов"),
-  confirmPassword: string,
+  password: stringRequired.min(8, "Минимуму 8 символов"),
+  confirmPassword: stringRequired,
 })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Пароли не совпадают",
@@ -19,13 +12,13 @@ const passwordSchema = z.object({
   });
 
 const signInSchema = z.object({
-    email: string.email(),
-    password: string.min(8, "Минимуму 8 символов")
+    email: stringRequired.email(),
+    password: stringRequired.min(8, "Минимуму 8 символов")
   }
 )
 
 const signUpSchema = z.object({
-  email: string.email("Введите валидный e-mail"),
+  email: stringRequired.email("Введите валидный e-mail"),
 }).and(passwordSchema)
 
 type SignInForm = z.infer<typeof signInSchema>
@@ -39,5 +32,6 @@ export type {
 export {
   signInSchema,
   passwordSchema,
-  signUpSchema
+  signUpSchema,
+  stringRequired,
 }

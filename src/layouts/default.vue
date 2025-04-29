@@ -74,11 +74,11 @@ const authStore = useAuthStore();
       icon: "mdi-account-multiple",
       route: "/patients",
     },
-    {
-      title: "Платежи",
-      icon: "mdi-cash",
-      route: "/payments",
-    },
+    // {
+    //   title: "Платежи",
+    //   icon: "mdi-cash",
+    //   route: "/payments",
+    // },
     {
       title: "Напоминание",
       icon: "mdi-bell-alert-outline",

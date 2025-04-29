@@ -6,7 +6,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useMessagesStore } from "@/stores";
+import { useAuthStore, useMessagesStore, useProfile } from "@/stores";
+const auth = useAuthStore();
+const profile = useProfile()
 
+onMounted(()=> {
+  if(auth.isAuthenticated){
+    profile.fetch()
+  }
+})
 const messages = useMessagesStore();
 </script>

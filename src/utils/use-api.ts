@@ -1,25 +1,26 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import type { PostgrestError } from "@supabase/supabase-js";
 
 type SupabaseResponse<T> = {
   data: T | null;
   error: Error | null;
 };
 
-type ApiCallback<T> = () => Promise<SupabaseResponse<T>>;
+type ApiCallback<T, S> = (arg?: S) => Promise<SupabaseResponse<T>>;
 
-export function useApi<T>(storeId: string, apiCallback: ApiCallback<T>) {
+export function useApi<T, S = never>(storeId: string, apiCallback: ApiCallback<T, S>) {
   return defineStore(storeId, () => {
     const data = ref<T | null>(null);
     const loading = ref(false);
-    const error = ref<Error | null>(null);
+    const error = ref<Error | PostgrestError | null>(null);
 
-    async function fetchData() {
+    async function fetch(args?: S) {
       loading.value = true;
       error.value = null;
 
       try {
-        const response = await apiCallback();
+        const response = await apiCallback(args);
 
         if (response.error) {
           error.value = new Error("Произошла ошибка при запросе");
@@ -45,7 +46,7 @@ export function useApi<T>(storeId: string, apiCallback: ApiCallback<T>) {
       data,
       loading,
       error,
-      fetchData,
+      fetch,
       reset,
     };
   });

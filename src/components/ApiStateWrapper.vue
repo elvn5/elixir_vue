@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100">
+  <div>
     <div
       v-if="loading"
       class="d-flex justify-center align-center py-6"
