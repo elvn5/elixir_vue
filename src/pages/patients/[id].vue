@@ -44,11 +44,11 @@
           >
             <v-card-title class="text-h6 d-flex justify-space-between align-center">
               Детали пациента
-              <v-chip
-                :color="patientInfo?.data?.payment_status === 'paid' ? 'green' : 'red'"
-              >
-                {{ formatEnum(patientInfo?.data?.payment_status) }}
-              </v-chip>
+              <!--              <v-chip-->
+              <!--                :color="patientInfo?.data?.payment_status === 'paid' ? 'green' : 'red'"-->
+              <!--              >-->
+              <!--                {{ formatEnum(patientInfo?.data?.payment_status) }}-->
+              <!--              </v-chip>-->
             </v-card-title>
 
             <v-divider />
@@ -167,16 +167,31 @@
             </ApiStateWrapper>
           </v-tabs-window-item>
           <v-tabs-window-item value="media">
-            <v-expansion-panels multiple>
-              <v-expansion-panel>
-                <v-expansion-panel-title>
-                  {{ new Date().toLocaleDateString("en-US", {}) }}
-                </v-expansion-panel-title>
-                <v-expansion-panel-text>
-                  <v-img src="https://www.fdoctor.ru/upload/iblock/501/rentgen_grudnoy_kletki.jpg" />
-                </v-expansion-panel-text>
-              </v-expansion-panel>
-            </v-expansion-panels>
+            <v-file-input
+              v-model="file"
+              label="Загрузить файл"
+              variant="solo-filled"
+              show-size
+              @update:model-value="uploadFileHandler"
+            />
+            <ApiStateWrapper
+              :loading="patientMedia.loading"
+              :error="patientMedia.error"
+            >
+              <v-expansion-panels multiple>
+                <v-expansion-panel
+                  v-for="media in patientMedia.data"
+                  :key="media.id"
+                >
+                  <v-expansion-panel-title>
+                    {{ formatDate(media.uploaded_at) }}
+                  </v-expansion-panel-title>
+                  <v-expansion-panel-text>
+                    <v-img :src="media.file_url" />
+                  </v-expansion-panel-text>
+                </v-expansion-panel>
+              </v-expansion-panels>
+            </ApiStateWrapper>
           </v-tabs-window-item>
 
           <v-tabs-window-item value="specification">
@@ -238,9 +253,16 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { useAttachDoctor, useAvailableDoctors, useDetachDoctor, usePatientHistory, usePatientInfo } from "@/stores";
+import {
+  useAttachDoctor,
+  useAvailableDoctors,
+  useDetachDoctor,
+  usePatientHistory,
+  usePatientInfo, usePatientsMedia,
+  useUploadPatientsFile
+} from "@/stores";
 import ApiStateWrapper from "@/components/ApiStateWrapper.vue";
-import { formatBirthday, formatDate, formatEnum } from "@/utils";
+import { formatBirthday, formatDate } from "@/utils";
 import EditPatient from "@/features/edit-patient/EditPatient.vue";
 import type { IdRouteParams } from "@/types";
 
@@ -251,13 +273,37 @@ const TAB_QUERY_PARAM = 'tab';
 const activeTab = ref<string>(route.query[TAB_QUERY_PARAM] as string || 'history');
 
 const dialog = ref(false)
+const file = ref<File | null>(null)
 const attachDoctorDialog = ref(false)
+const uploadFile = useUploadPatientsFile()
 const patientHistory = usePatientHistory();
 const patientInfo = usePatientInfo()
 const doctors = useAvailableDoctors()
 const attachDoctor = useAttachDoctor()
 const detachDoctor = useDetachDoctor()
+const patientMedia = usePatientsMedia();
 const selectedDoctor = shallowRef<string | null>(null)
+
+const uploadFileHandler = (newFile: File | File[] | null) => {
+  if (!newFile) {
+    console.log("Файл не выбран");
+    file.value = null;
+    return;
+  }
+  const result = Array.isArray(newFile) ? newFile[0] : newFile;
+
+  const formData = new FormData();
+  formData.append("file", result);
+
+  uploadFile
+    .fetch({ data: formData, patientId: route.params.id })
+    .then(() => {
+      patientMedia.fetch(route.params.id);
+    })
+    .catch((error) => {
+      console.error("Ошибка при загрузке файла:", error);
+    });
+};
 
 const doctorsList = computed(()=> {
   if(doctors.data && doctors?.data.length > 0) {
@@ -294,6 +340,7 @@ watch(
 onMounted(()=> {
   patientHistory.fetch(route.params.id);
   patientInfo.fetch(route.params.id);
+  patientMedia.fetch(route.params.id)
   doctors.fetch();
 })
 

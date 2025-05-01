@@ -1,6 +1,7 @@
 import * as z from "zod"
 
 const stringRequired = z.string({ message: "Обязательное поле" })
+const stringOptional = z.string({ message: "Введите строковое значение" }).optional()
 
 const passwordSchema = z.object({
   password: stringRequired.min(8, "Минимуму 8 символов"),
@@ -34,4 +35,5 @@ export {
   passwordSchema,
   signUpSchema,
   stringRequired,
+  stringOptional
 }

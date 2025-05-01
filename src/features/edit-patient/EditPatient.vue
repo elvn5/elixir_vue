@@ -126,7 +126,7 @@
 <script lang="ts" setup>
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { EditPatientSchema } from "@/features/edit-patient/schema";
+import { PatientSchema } from "@/features/edit-patient/schema";
 import { useEditPatient, usePatientInfo } from "@/stores";
 import type { IdRouteParams } from "@/types";
 
@@ -141,7 +141,7 @@ const route = useRoute() as IdRouteParams
 
 const emit = defineEmits(['update:dialog']);
 const { handleSubmit, defineField, errors, setFieldValue, resetForm } = useForm({
-  validationSchema: toTypedSchema(EditPatientSchema),
+  validationSchema: toTypedSchema(PatientSchema),
 })
 
 watch(

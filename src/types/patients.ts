@@ -48,7 +48,26 @@ export type PatientStoreState = Partial<{
   }
 }>
 
+export type UploadPatientFile = {
+  data: FormData,
+  patientId: string
+}
+
+export type PatientMedia = {
+  id: string;
+  patient_id: string;
+  file_url: string;
+  uploaded_at: string;
+}
+
 export type Patients = {
   id: string;
   full_name:string;
 }
+
+
+export type UploadFile = {
+  file: File;
+  patient_id: string;
+}
+

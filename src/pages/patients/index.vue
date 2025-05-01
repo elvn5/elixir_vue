@@ -108,6 +108,42 @@
                   label="Полис / Док. ID"
                 />
               </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+              >
+                <v-text-field
+                  v-bind="allergiesAttr"
+                  id="allergies"
+                  v-model="allergies"
+                  :error-messages="errors.allergies"
+                  label="Аллергии"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+              >
+                <v-text-field
+                  v-bind="implantsAttr"
+                  id="implants"
+                  v-model="implants"
+                  :error-messages="errors.implants"
+                  label="Импланты"
+                />
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+              >
+                <v-text-field
+                  v-bind="contrainAttr"
+                  id="contrain"
+                  v-model="contrain"
+                  :error-messages="errors.contraindications"
+                  label="Противопоказания"
+                />
+              </v-col>
             </v-row>
           </v-form>
         </v-card-text>
@@ -115,7 +151,7 @@
           <v-spacer />
           <v-btn
             text
-            @click="emit('update:dialog', false)"
+            @click="dialog = false"
           >
             Отмена
           </v-btn>
@@ -148,11 +184,10 @@
 
 <script setup lang="ts">
 import router from "@/router";
-import { useCreatePatient, useEditPatient, usePatientInfo, usePatients } from "@/stores";
-import type { IdRouteParams } from "@/types";
+import { useCreatePatient, usePatients } from "@/stores";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { EditPatientSchema } from "@/features/edit-patient/schema";
+import { PatientSchema } from "@/features/edit-patient/schema";
 
 const dialog = ref(false);
 const patients = usePatients()
@@ -165,15 +200,9 @@ function goToDetails(id: string){
   router.push(`/patients/${id}?tab=history`);
 }
 
-
 const createPatient = useCreatePatient()
-const patientInfo = usePatientInfo()
-const route = useRoute() as IdRouteParams
-
-
-const emit = defineEmits(['update:dialog']);
 const { handleSubmit, defineField, errors } = useForm({
-  validationSchema: toTypedSchema(EditPatientSchema),
+  validationSchema: toTypedSchema(PatientSchema),
 })
 
 const [email, emailAttr] = defineField("email")
@@ -183,11 +212,13 @@ const [birth, birthAttr] = defineField("birth_date")
 const [phone, phoneAttr] = defineField("phone")
 const [address, addressAttr] = defineField("address")
 const [doc, docAttr] = defineField("document_id")
+const [allergies, allergiesAttr] = defineField("allergies")
+const [implants, implantsAttr] = defineField("implants")
+const [contrain, contrainAttr] = defineField("contraindications")
 
 const onSubmit = handleSubmit(data => {
   createPatient.fetch(data).then(() => {
-    emit('update:dialog', false)
-    patientInfo.fetch(route.params.id)
+    dialog.value = false;
   })
 });
 

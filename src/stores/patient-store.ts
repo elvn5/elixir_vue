@@ -1,20 +1,71 @@
 import { supabaseApp } from "@/services";
-import { useApi } from "@/utils";
+import {  useApi } from "@/utils";
 import type { Staff } from "@/types";
-import type { Patients, PatientStore, PatientStoreState } from "@/types/patients";
+import type { PatientMedia, Patients, PatientStore, PatientStoreState, UploadPatientFile } from "@/types/patients";
+import type { Patient } from "@/features/edit-patient/schema";
+import { useProfile } from "@/stores/profile-store";
 
 type AttachDoctor = {
   doctorId: string;
   patientId: string;
 }
 
-export const useCreatePatient = useApi<PatientStore, PatientStore>(
+export const usePatientsMedia = useApi<PatientMedia[], string>(
+  "patient-media",
+  async (id) => {
+      const { data, error } = await supabaseApp.
+      from("patient_files")
+        .select("*")
+        .eq("patient_id", id)
+
+      return {
+        data, error
+      }
+})
+
+export const useUploadPatientsFile = useApi<unknown, UploadPatientFile>
+("upload-file",
+  async (arg) => {
+  const formData = arg?.data as FormData;
+  const file = formData?.get("file") as File | null;
+
+    if (!file) {
+      throw new Error("Файл не найден в FormData");
+    }
+    const filename = file.name;
+    const storagePath = `patients/${filename}`;
+
+    const { data, error } = await supabaseApp.storage
+      .from("uploads")
+      .upload(storagePath, file);
+
+    const { data: urlData } = supabaseApp
+      .storage
+      .from('uploads')
+      .getPublicUrl(data?.path as string);
+
+    const publicUrl = urlData.publicUrl;
+
+    console.log(data)
+
+    await supabaseApp.from("patient_files").insert({
+      patient_id: arg?.patientId,
+      file_url: publicUrl,
+    }).eq("id", data?.id)
+
+
+    return { data, error };
+})
+
+export const useCreatePatient = useApi<PatientStore, Patient>(
   "create-patient",
   async (arg) => {
 
+    const profile = useProfile();
+
   const patients = usePatients()
   const { data, error } = await supabaseApp.from("patients")
-    .insert([arg])
+    .insert([{ ...arg, clinic_id: profile?.data?.clinic_id }])
     .select()
     .single()
 
