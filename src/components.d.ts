@@ -7,6 +7,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ApiStateWrapper: typeof import('./components/ApiStateWrapper.vue')['default']
     AppFooter: typeof import('./components/AppFooter.vue')['default']
     Calendar: typeof import('./components/Calendar.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
