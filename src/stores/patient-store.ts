@@ -33,11 +33,13 @@ export const useUploadPatientsFile = useApi<unknown, UploadPatientFile>
       throw new Error("Файл не найден в FormData");
     }
     const filename = file.name;
-    const storagePath = `patients/${filename}`;
+    const storagePath = `${arg?.patientId}/${filename}`;
 
     const { data, error } = await supabaseApp.storage
       .from("uploads")
       .upload(storagePath, file);
+
+    console.log(data);
 
     const { data: urlData } = supabaseApp
       .storage

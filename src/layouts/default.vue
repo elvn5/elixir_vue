@@ -79,11 +79,11 @@ const authStore = useAuthStore();
     //   icon: "mdi-cash",
     //   route: "/payments",
     // },
-    {
-      title: "Напоминание",
-      icon: "mdi-bell-alert-outline",
-      route: "/reminders",
-    },
+    // {
+    //   title: "Напоминание",
+    //   icon: "mdi-bell-alert-outline",
+    //   route: "/reminders",
+    // },
   ]
 </script>
 
