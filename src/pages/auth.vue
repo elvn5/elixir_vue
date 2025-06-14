@@ -12,32 +12,29 @@ import { randomUUID, signInSchema } from "@/utils";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useAuthStore } from "@/stores";
 
-const { login } = useAuthStore()
+const { login } = useAuthStore();
 
-const formId = randomUUID()
+const formId = randomUUID();
 
 const { handleSubmit, defineField, errors } = useForm({
-  validationSchema: toTypedSchema(signInSchema),
-})
-
-const [email, emailAttr] = defineField("email")
-const [password, passwordAttr] = defineField("password")
-
-const onSubmit = handleSubmit(data => {
-  login(data)
+  validationSchema: toTypedSchema(signInSchema, {}),
+  initialValues: {
+    email: "example@gmail.com",
+    password: "adminadmin",
+  },
 });
 
+const [email, emailAttr] = defineField("email");
+const [password, passwordAttr] = defineField("password");
+
+const onSubmit = handleSubmit((data) => {
+  login(data);
+});
 </script>
 
 <template>
-  <v-container
-    :key="formId"
-    class="wrapper"
-  >
-    <v-sheet
-      class="mx-auto form"
-      width="300"
-    >
+  <v-container :key="formId" class="wrapper">
+    <v-sheet class="mx-auto form" width="300">
       <v-form @submit.prevent="onSubmit">
         <v-text-field
           v-bind="emailAttr"
@@ -55,20 +52,15 @@ const onSubmit = handleSubmit(data => {
           :error-messages="errors.password"
           required
         />
-        <v-btn
-          class="mx-auto w-100"
-          type="submit"
-        >
-          Войти
-        </v-btn>
+        <v-btn class="mx-auto w-100" type="submit"> Войти </v-btn>
       </v-form>
-<!--      <router-link to="/signup">-->
-<!--        <v-container class="d-flex justify-center">-->
-<!--          <v-btn variant="text">-->
-<!--            Зарегистрироваться-->
-<!--          </v-btn>-->
-<!--        </v-container>-->
-<!--      </router-link>-->
+      <!--      <router-link to="/signup">-->
+      <!--        <v-container class="d-flex justify-center">-->
+      <!--          <v-btn variant="text">-->
+      <!--            Зарегистрироваться-->
+      <!--          </v-btn>-->
+      <!--        </v-container>-->
+      <!--      </router-link>-->
     </v-sheet>
   </v-container>
 </template>
@@ -86,4 +78,3 @@ const onSubmit = handleSubmit(data => {
   padding: 1rem;
 }
 </style>
-
